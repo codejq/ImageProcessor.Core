@@ -273,7 +273,7 @@
           </a>
         </li>
         <li class="nav-item ms-lg-1">
-          <a class="btn btn-sm btn-accent" href="https://www.nuget.org/packages/ImageProcessor.Core" target="_blank">
+          <a class="btn btn-sm btn-accent" href="https://www.nuget.org/packages/ImageProcessor.Core.CoreCompat" target="_blank">
             <i class="fa-solid fa-cube me-1"></i>NuGet
           </a>
         </li>
@@ -310,7 +310,7 @@
         <!-- install snippet -->
         <div class="install-box" id="installSnippet">
           <i class="bi bi-terminal-fill text-secondary"></i>
-          <span><span class="cmd">dotnet add package</span> ImageProcessor.Core</span>
+          <span><span class="cmd">dotnet add package</span> ImageProcessor.Core.CoreCompat</span>
           <button onclick="copyInstall()" title="Copy">
             <i class="bi bi-clipboard" id="clipIcon"></i>
           </button>
@@ -580,13 +580,13 @@ factory.Load("img.png")
           </ul>
           <div class="tab-content p-3 p-md-4">
             <div class="tab-pane fade show active" id="i1">
-<pre><code class="language-bash">dotnet add package ImageProcessor.Core</code></pre>
+<pre><code class="language-bash">dotnet add package ImageProcessor.Core.CoreCompat</code></pre>
             </div>
             <div class="tab-pane fade" id="i2">
-<pre><code class="language-powershell">Install-Package ImageProcessor.Core</code></pre>
+<pre><code class="language-powershell">Install-Package ImageProcessor.Core.CoreCompat</code></pre>
             </div>
             <div class="tab-pane fade" id="i3">
-<pre><code class="language-xml">&lt;PackageReference Include="ImageProcessor.Core" Version="2.*" /&gt;</code></pre>
+<pre><code class="language-xml">&lt;PackageReference Include="ImageProcessor.Core.CoreCompat" Version="2.*" /&gt;</code></pre>
             </div>
           </div>
         </div>
@@ -627,7 +627,7 @@ factory.Load("img.png")
     <h2 class="fw-bold mb-3">Ready to stop writing GDI+ boilerplate?</h2>
     <p class="text-secondary mb-4">One package. Fluent API. Every image operation you need.</p>
     <div class="d-flex justify-content-center gap-3 flex-wrap">
-      <a href="https://www.nuget.org/packages/ImageProcessor.Core" target="_blank" class="btn btn-accent">
+      <a href="https://www.nuget.org/packages/ImageProcessor.Core.CoreCompat" target="_blank" class="btn btn-accent">
         <i class="fa-solid fa-cube me-2"></i>View on NuGet
       </a>
       <a href="https://github.com/codejq/ImageProcessor.Core" target="_blank" class="btn btn-ghost">
@@ -648,7 +648,7 @@ factory.Load("img.png")
       <a href="https://github.com/codejq/ImageProcessor.Core" target="_blank" class="text-secondary text-decoration-none">
         <i class="bi bi-github me-1"></i>GitHub
       </a>
-      <a href="https://www.nuget.org/packages/ImageProcessor.Core" target="_blank" class="text-secondary text-decoration-none">
+      <a href="https://www.nuget.org/packages/ImageProcessor.Core.CoreCompat" target="_blank" class="text-secondary text-decoration-none">
         <i class="fa-solid fa-cube me-1"></i>NuGet
       </a>
       <a href="https://github.com/codejq/ImageProcessor.Core/blob/master/README.md" target="_blank" class="text-secondary text-decoration-none">
@@ -667,7 +667,7 @@ factory.Load("img.png")
 <script>
   // Copy install command
   function copyInstall() {
-    navigator.clipboard.writeText('dotnet add package ImageProcessor.Core').then(() => {
+    navigator.clipboard.writeText('dotnet add package ImageProcessor.Core.CoreCompat').then(() => {
       const icon = document.getElementById('clipIcon');
       icon.className = 'bi bi-clipboard-check';
       icon.style.color = '#4ade80';

@@ -10,9 +10,9 @@
     <RepositoryType>git</RepositoryType>
     <RepositoryUrl>https://github.com/codejq/ImageProcessor.Core</RepositoryUrl>
     <AssemblyName>ImageProcessor.Core</AssemblyName>
-    <PackageId>ImageProcessor.Core</PackageId>
-    <PackageTags>image;imaging;resize;watermark;mosaic;fluent;gdi;drawing</PackageTags>
-    <Description>A fluent wrapper around System.Drawing.Common for processing image files. Supports resize, crop, rotate, watermark, mosaic, filters, and more. https://codejq.github.io/ImageProcessor.Core/</Description>
+    <PackageId>ImageProcessor.Core.CoreCompat</PackageId>
+    <PackageTags>image;imaging;resize;watermark;mosaic;fluent;gdi;drawing;netcore;compat</PackageTags>
+    <Description>Community-maintained fork of ImageProcessor for modern .NET. Fluent wrapper around System.Drawing.Common — resize, crop, watermark, mosaic, filters and more. Targets .NET Standard 2.0, .NET 8 and .NET 9 (Windows). https://codejq.github.io/ImageProcessor.Core/</Description>
     <PackageProjectUrl>https://codejq.github.io/ImageProcessor.Core/</PackageProjectUrl>
     <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
     <PackageReadmeFile>README.md</PackageReadmeFile>
