@@ -11,6 +11,10 @@ jobs:
     name: Build & verify
     runs-on: windows-latest   # System.Drawing.Common requires Windows on .NET 8/9
 
+    defaults:
+      run:
+        shell: bash
+
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -22,7 +26,7 @@ jobs:
             8.0.x
             9.0.x
 
-      - name: Restore dependencies
+      - name: Restore
         run: dotnet restore src/ImageProcessor.Core/ImageProcessor.Core.csproj
 
       - name: Build (Debug)
@@ -32,7 +36,8 @@ jobs:
         run: dotnet build src/ImageProcessor.Core/ImageProcessor.Core.csproj --no-restore -c Release
 
       - name: Pack (verify NuGet package builds)
-        run: >
-          dotnet pack src/ImageProcessor.Core/ImageProcessor.Core.csproj
-          --no-build -c Release
-          -o ./artifacts
+        run: |
+          dotnet pack src/ImageProcessor.Core/ImageProcessor.Core.csproj \
+            --no-restore -c Release \
+            -o artifacts
+          ls -la artifacts/
