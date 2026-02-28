@@ -1,0 +1,61 @@
+name: Publish to NuGet
+
+# Triggers when you push a version tag, e.g.: git tag v2.0.0 && git push --tags
+on:
+  push:
+    tags:
+      - 'v*.*.*'
+
+jobs:
+  publish:
+    name: Pack & publish
+    runs-on: windows-latest   # System.Drawing.Common requires Windows on .NET 8/9
+    permissions:
+      contents: write         # needed to create a GitHub Release
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: |
+            8.0.x
+            9.0.x
+
+      # Strip the leading 'v' from the tag to get the bare version number
+      - name: Extract version from tag
+        id: version
+        shell: bash
+        run: echo "VERSION=${GITHUB_REF_NAME#v}" >> "$GITHUB_OUTPUT"
+
+      - name: Restore dependencies
+        run: dotnet restore src/ImageProcessor.Core/ImageProcessor.Core.csproj
+
+      - name: Build (Release)
+        run: >
+          dotnet build src/ImageProcessor.Core/ImageProcessor.Core.csproj
+          --no-restore -c Release
+          /p:Version=${{ steps.version.outputs.VERSION }}
+
+      - name: Pack
+        run: >
+          dotnet pack src/ImageProcessor.Core/ImageProcessor.Core.csproj
+          --no-build -c Release
+          /p:Version=${{ steps.version.outputs.VERSION }}
+          -o ./artifacts
+
+      - name: Push to NuGet.org
+        run: >
+          dotnet nuget push ./artifacts/*.nupkg
+          --api-key ${{ secrets.NUGET_API_KEY }}
+          --source https://api.nuget.org/v3/index.json
+          --skip-duplicate
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          name: Release ${{ github.ref_name }}
+          files: ./artifacts/*.nupkg
+          generate_release_notes: true

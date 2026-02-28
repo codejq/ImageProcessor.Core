@@ -52,9 +52,11 @@ namespace ImageProcessor.Common.Exceptions
         /// <param name="context">The <see cref="StreamingContext" /> that contains contextual information about the source or destination. </param>
         /// <exception cref="ArgumentNullException">The <paramref name="info" /> parameter is null. </exception>
         /// <exception cref="SerializationException">The class name is null or <see cref="P:System.Exception.HResult" /> is zero (0). </exception>
+#pragma warning disable SYSLIB0051 // obsolete serialization ctor — kept for binary-serialization back-compat
         private ImageProcessingException(SerializationInfo info, StreamingContext context)
             : base(info, context)
         {
         }
+#pragma warning restore SYSLIB0051
     }
 }

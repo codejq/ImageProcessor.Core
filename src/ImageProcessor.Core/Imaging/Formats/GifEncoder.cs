@@ -305,7 +305,9 @@ namespace ImageProcessor.Imaging.Formats
         {
             sourceGif.Position = SourceColorBlockPosition; // Locating the image color table
             byte[] colorTable = new byte[SourceColorBlockLength];
+#pragma warning disable CA2022 // GIF spec guarantees these block lengths are fully available
             sourceGif.Read(colorTable, 0, colorTable.Length);
+#pragma warning restore CA2022
             this.imageStream.Write(colorTable, 0, colorTable.Length);
         }
 
@@ -318,7 +320,9 @@ namespace ImageProcessor.Imaging.Formats
         {
             sourceGif.Position = SourceGraphicControlExtensionPosition; // Locating the source GCE
             byte[] blockhead = new byte[SourceGraphicControlExtensionLength];
+#pragma warning disable CA2022 // GIF spec guarantees these block lengths are fully available
             sourceGif.Read(blockhead, 0, blockhead.Length); // Reading source GCE
+#pragma warning restore CA2022
 
             this.WriteShort(GraphicControlExtensionBlockIdentifier); // Identifier
             this.WriteByte(GraphicControlExtensionBlockSize); // Block Size
@@ -344,7 +348,9 @@ namespace ImageProcessor.Imaging.Formats
             // Local Image Descriptor
             sourceGif.Position = SourceImageBlockPosition; // Locating the image block
             byte[] header = new byte[SourceImageBlockHeaderLength];
+#pragma warning disable CA2022 // GIF spec guarantees these block lengths are fully available
             sourceGif.Read(header, 0, header.Length);
+#pragma warning restore CA2022
             this.WriteByte(header[0]); // Separator
             this.WriteShort(x); // Position X
             this.WriteShort(y); // Position Y
@@ -372,7 +378,9 @@ namespace ImageProcessor.Imaging.Formats
             while (dataLength > 0)
             {
                 byte[] imgData = new byte[dataLength];
+#pragma warning disable CA2022 // GIF spec guarantees these block lengths are fully available
                 sourceGif.Read(imgData, 0, dataLength);
+#pragma warning restore CA2022
 
                 this.imageStream.WriteByte(Convert.ToByte(dataLength));
                 this.imageStream.Write(imgData, 0, dataLength);

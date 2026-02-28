@@ -276,7 +276,6 @@ namespace ImageProcessor.Common.Helpers
 
             return GetAllAssemblies()
                 .Where(x => !excludeFromResults.Contains(x)
-                            && !x.GlobalAssemblyCache
                             && !exclusionFilter.Any(f => x.FullName.StartsWith(f, StringComparison.OrdinalIgnoreCase)));
         }
     }

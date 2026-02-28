@@ -51,7 +51,9 @@ namespace ImageProcessor.Imaging.Formats
             int numberOfBytesToRead = supportedImageFormats.Max(f => f.FileHeaders.Max(h => h.Length));
 
             byte[] buffer = new byte[numberOfBytesToRead];
+#pragma warning disable CA2022 // header detection reads from a seekable stream at position 0
             stream.Read(buffer, 0, buffer.Length);
+#pragma warning restore CA2022
 
             // ReSharper disable once PossibleMultipleEnumeration
             foreach (ISupportedImageFormat supportedImageFormat in supportedImageFormats)

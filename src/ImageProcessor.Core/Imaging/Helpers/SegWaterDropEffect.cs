@@ -150,9 +150,9 @@ namespace ImageProcessor.Core.Imaging.Helpers
                             maxW = curW;
                         }
                     }
-                    catch (Exception ex)
+                    catch (Exception)
                     {
-                        throw ex;
+                        throw;
                     }
                 }
 
