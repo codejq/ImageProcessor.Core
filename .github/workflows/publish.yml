@@ -37,12 +37,13 @@ jobs:
         run: dotnet restore src/ImageProcessor.Core/ImageProcessor.Core.csproj
 
       # Pack does an implicit build — more reliable than --no-build on multi-target projects
+      # Use -p: (not /p:) — Git Bash on Windows strips leading / from MSBuild flags
       - name: Pack
         run: |
           dotnet pack src/ImageProcessor.Core/ImageProcessor.Core.csproj \
             --no-restore \
             -c Release \
-            /p:Version=${{ steps.version.outputs.VERSION }} \
+            -p:Version=${{ steps.version.outputs.VERSION }} \
             -o artifacts
 
       - name: List artifacts (debug)
