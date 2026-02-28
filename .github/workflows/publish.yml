@@ -33,15 +33,13 @@ jobs:
         id: version
         run: echo "VERSION=${GITHUB_REF_NAME#v}" >> "$GITHUB_OUTPUT"
 
-      - name: Restore
-        run: dotnet restore src/ImageProcessor.Core/ImageProcessor.Core.csproj
-
-      # Pack does an implicit build — more reliable than --no-build on multi-target projects
-      # Use -p: (not /p:) — Git Bash on Windows strips leading / from MSBuild flags
+      # Single atomic step: restore + build + pack in one MSBuild invocation.
+      # Splitting restore and pack --no-restore causes net9.0-windows to be
+      # silently dropped from the nupkg when conditional ItemGroups are used.
+      # Use -p: (not /p:) — Git Bash on Windows strips leading / from MSBuild flags.
       - name: Pack
         run: |
           dotnet pack src/ImageProcessor.Core/ImageProcessor.Core.csproj \
-            --no-restore \
             -c Release \
             -p:Version=${{ steps.version.outputs.VERSION }} \
             -o artifacts

@@ -26,18 +26,15 @@ jobs:
             8.0.x
             9.0.x
 
-      - name: Restore
-        run: dotnet restore src/ImageProcessor.Core/ImageProcessor.Core.csproj
-
       - name: Build (Debug)
-        run: dotnet build src/ImageProcessor.Core/ImageProcessor.Core.csproj --no-restore -c Debug
+        run: dotnet build src/ImageProcessor.Core/ImageProcessor.Core.csproj -c Debug
 
       - name: Build (Release)
-        run: dotnet build src/ImageProcessor.Core/ImageProcessor.Core.csproj --no-restore -c Release
+        run: dotnet build src/ImageProcessor.Core/ImageProcessor.Core.csproj -c Release
 
-      - name: Pack (verify NuGet package builds)
+      - name: Pack (verify all TFMs included)
         run: |
           dotnet pack src/ImageProcessor.Core/ImageProcessor.Core.csproj \
-            --no-restore -c Release \
+            -c Release \
             -o artifacts
           ls -la artifacts/
