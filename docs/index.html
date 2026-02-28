@@ -1,0 +1,685 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ImageProcessor.Core — Fluent .NET Image Processing</title>
+  <meta name="description" content="A fluent, chainable image processing library for .NET. Resize, crop, watermark, mosaic, filter and more — in one line." />
+
+  <!-- Bootstrap 5.3 -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" />
+  <!-- Bootstrap Icons -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" />
+  <!-- Font Awesome 6 -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+  <!-- Highlight.js for code -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css" />
+
+  <style>
+    :root {
+      --accent: #7c3aed;
+      --accent-light: #a78bfa;
+      --accent-glow: rgba(124,58,237,.35);
+      --surface: #0f0f1a;
+      --surface2: #16162a;
+      --border: rgba(255,255,255,.08);
+    }
+
+    body {
+      background: var(--surface);
+      font-family: 'Segoe UI', system-ui, sans-serif;
+    }
+
+    /* ── Navbar ── */
+    .navbar {
+      background: rgba(15,15,26,.85) !important;
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+    }
+    .navbar-brand span { color: var(--accent-light); }
+
+    /* ── Hero ── */
+    .hero {
+      background: radial-gradient(ellipse 80% 60% at 50% -10%,
+        rgba(124,58,237,.28) 0%, transparent 70%),
+        var(--surface);
+      min-height: 92vh;
+      display: flex;
+      align-items: center;
+    }
+    .hero-badge {
+      display: inline-block;
+      background: rgba(124,58,237,.18);
+      border: 1px solid rgba(167,139,250,.35);
+      color: var(--accent-light);
+      border-radius: 999px;
+      font-size: .78rem;
+      letter-spacing: .08em;
+      padding: .25rem .85rem;
+    }
+    .hero-title {
+      font-size: clamp(2.4rem, 6vw, 4.2rem);
+      font-weight: 800;
+      line-height: 1.1;
+      background: linear-gradient(135deg, #fff 30%, var(--accent-light));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .hero-sub {
+      font-size: clamp(1rem, 2vw, 1.25rem);
+      color: #94a3b8;
+      max-width: 580px;
+    }
+    .btn-accent {
+      background: var(--accent);
+      border: none;
+      color: #fff;
+      font-weight: 600;
+      padding: .65rem 1.6rem;
+      border-radius: .6rem;
+      transition: box-shadow .2s, transform .15s;
+    }
+    .btn-accent:hover {
+      color: #fff;
+      box-shadow: 0 0 22px var(--accent-glow);
+      transform: translateY(-2px);
+    }
+    .btn-ghost {
+      border: 1px solid var(--border);
+      color: #cbd5e1;
+      background: transparent;
+      padding: .65rem 1.6rem;
+      border-radius: .6rem;
+      font-weight: 500;
+      transition: border-color .2s, color .2s;
+    }
+    .btn-ghost:hover { border-color: var(--accent-light); color: var(--accent-light); }
+
+    /* ── Install snippet ── */
+    .install-box {
+      display: inline-flex;
+      align-items: center;
+      gap: .75rem;
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: .8rem;
+      padding: .6rem 1.1rem;
+      font-family: 'Cascadia Code', 'Fira Code', monospace;
+      font-size: .95rem;
+      color: #e2e8f0;
+    }
+    .install-box .cmd { color: var(--accent-light); }
+    .install-box button {
+      background: none; border: none; color: #64748b; cursor: pointer;
+      transition: color .15s;
+    }
+    .install-box button:hover { color: var(--accent-light); }
+
+    /* ── Comparison ── */
+    .vs-block {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 1rem;
+      padding: 1.4rem 1.6rem;
+    }
+    .vs-label {
+      font-size: .72rem;
+      font-weight: 700;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      margin-bottom: .6rem;
+    }
+    .vs-bad  { color: #f87171; }
+    .vs-good { color: #4ade80; }
+
+    /* ── Feature cards ── */
+    .feature-card {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 1rem;
+      padding: 1.5rem;
+      height: 100%;
+      transition: border-color .2s, transform .2s;
+    }
+    .feature-card:hover {
+      border-color: rgba(167,139,250,.4);
+      transform: translateY(-3px);
+    }
+    .feature-icon {
+      width: 48px; height: 48px;
+      border-radius: .75rem;
+      background: rgba(124,58,237,.18);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.3rem;
+      color: var(--accent-light);
+      margin-bottom: 1rem;
+    }
+
+    /* ── Code tabs ── */
+    .code-card {
+      background: #0d1117;
+      border: 1px solid var(--border);
+      border-radius: 1rem;
+      overflow: hidden;
+    }
+    .code-card .nav-tabs {
+      background: #161b22;
+      border-bottom: 1px solid var(--border);
+      padding: .4rem .75rem 0;
+      gap: .25rem;
+    }
+    .code-card .nav-tabs .nav-link {
+      color: #8b949e;
+      border: none;
+      border-radius: .4rem .4rem 0 0;
+      padding: .4rem .9rem;
+      font-size: .82rem;
+    }
+    .code-card .nav-tabs .nav-link.active {
+      background: var(--accent);
+      color: #fff;
+    }
+    .code-card pre { margin: 0; border-radius: 0; }
+    .code-card pre code { font-size: .82rem; }
+
+    /* ── Pipeline diagram ── */
+    .pipeline {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0;
+      flex-wrap: wrap;
+    }
+    .pipe-box {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: .75rem;
+      padding: .55rem 1.1rem;
+      font-size: .85rem;
+      color: #e2e8f0;
+      text-align: center;
+      white-space: nowrap;
+    }
+    .pipe-box.accent {
+      border-color: rgba(167,139,250,.5);
+      color: var(--accent-light);
+    }
+    .pipe-arrow {
+      color: #475569;
+      font-size: 1.1rem;
+      padding: 0 .4rem;
+    }
+
+    /* ── Framework badges ── */
+    .fw-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: .45rem;
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: .6rem;
+      padding: .5rem 1rem;
+      font-size: .9rem;
+    }
+
+    /* ── Section headers ── */
+    .section-label {
+      font-size: .75rem;
+      font-weight: 700;
+      letter-spacing: .15em;
+      text-transform: uppercase;
+      color: var(--accent-light);
+    }
+    .section-title {
+      font-size: clamp(1.6rem, 3vw, 2.4rem);
+      font-weight: 800;
+    }
+
+    /* ── Footer ── */
+    footer {
+      background: var(--surface2);
+      border-top: 1px solid var(--border);
+    }
+
+    /* ── Scroll reveal ── */
+    .reveal { opacity: 0; transform: translateY(28px); transition: opacity .55s ease, transform .55s ease; }
+    .reveal.visible { opacity: 1; transform: none; }
+
+    /* hljs override */
+    .hljs { background: transparent !important; }
+  </style>
+</head>
+<body>
+
+<!-- ══════════════════════ NAVBAR ══════════════════════ -->
+<nav class="navbar navbar-expand-lg sticky-top">
+  <div class="container">
+    <a class="navbar-brand fw-bold d-flex align-items-center gap-2" href="#">
+      <i class="fa-solid fa-image text-violet-400" style="color:var(--accent-light)"></i>
+      Image<span>Processor</span>.Core
+    </a>
+    <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#nav">
+      <i class="bi bi-list fs-4 text-light"></i>
+    </button>
+    <div class="collapse navbar-collapse" id="nav">
+      <ul class="navbar-nav ms-auto align-items-lg-center gap-lg-1">
+        <li class="nav-item"><a class="nav-link text-secondary" href="#features">Features</a></li>
+        <li class="nav-item"><a class="nav-link text-secondary" href="#examples">Examples</a></li>
+        <li class="nav-item"><a class="nav-link text-secondary" href="#install">Install</a></li>
+        <li class="nav-item ms-lg-2">
+          <a class="btn btn-sm btn-ghost" href="https://github.com/codejq/ImageProcessor.Core" target="_blank">
+            <i class="bi bi-github me-1"></i>GitHub
+          </a>
+        </li>
+        <li class="nav-item ms-lg-1">
+          <a class="btn btn-sm btn-accent" href="https://www.nuget.org/packages/ImageProcessor.Core" target="_blank">
+            <i class="fa-solid fa-cube me-1"></i>NuGet
+          </a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<!-- ══════════════════════ HERO ══════════════════════ -->
+<section class="hero">
+  <div class="container py-5">
+    <div class="row align-items-center g-5">
+      <div class="col-lg-6">
+        <span class="hero-badge mb-3 d-inline-block">
+          <i class="bi bi-stars me-1"></i> .NET Standard 2.0 · .NET 8 · .NET 9
+        </span>
+        <h1 class="hero-title mb-4">
+          Image processing<br>without the boilerplate.
+        </h1>
+        <p class="hero-sub mb-5">
+          A fluent, chainable API wrapper for <code>System.Drawing.Common</code>.
+          Resize, crop, watermark, mosaic, filter — in a single readable chain.
+          No GDI+ plumbing required.
+        </p>
+        <div class="d-flex flex-wrap gap-3 mb-4">
+          <a href="#install" class="btn btn-accent">
+            <i class="bi bi-download me-1"></i> Get started
+          </a>
+          <a href="https://github.com/codejq/ImageProcessor.Core" target="_blank" class="btn btn-ghost">
+            <i class="bi bi-github me-1"></i> View on GitHub
+          </a>
+        </div>
+
+        <!-- install snippet -->
+        <div class="install-box" id="installSnippet">
+          <i class="bi bi-terminal-fill text-secondary"></i>
+          <span><span class="cmd">dotnet add package</span> ImageProcessor.Core</span>
+          <button onclick="copyInstall()" title="Copy">
+            <i class="bi bi-clipboard" id="clipIcon"></i>
+          </button>
+        </div>
+      </div>
+
+      <div class="col-lg-6">
+        <!-- Comparison -->
+        <div class="row g-3">
+          <div class="col-12">
+            <div class="vs-block">
+              <div class="vs-label vs-bad"><i class="bi bi-x-circle me-1"></i>Without ImageProcessor.Core</div>
+              <pre class="mb-0" style="font-size:.78rem;color:#f87171;background:transparent"><code>var bmp = new Bitmap(file);
+var g   = Graphics.FromImage(bmp);
+// resize — find the codec, set the params...
+var codecInfo = GetEncoder(ImageFormat.Jpeg);
+var encoderParams = new EncoderParameters(1);
+encoderParams.Param[0] = new EncoderParameter(
+    Encoder.Quality, 85L);
+// watermark — create font, brush, layout...
+var font  = new Font("Arial", 24, FontStyle.Bold);
+var brush = new SolidBrush(Color.FromArgb(180,255,255,255));
+g.DrawString("© Me", font, brush, new PointF(20,20));
+bmp.Save(output, codecInfo, encoderParams);</code></pre>
+            </div>
+          </div>
+          <div class="col-12">
+            <div class="vs-block">
+              <div class="vs-label vs-good"><i class="bi bi-check-circle me-1"></i>With ImageProcessor.Core</div>
+              <pre class="mb-0" style="font-size:.78rem;color:#4ade80;background:transparent"><code>new ImageFactory()
+    .Load(file)
+    .Resize(new ResizeLayer(1280, 720))
+    .Watermark(new TextLayer { Text = "© Me" })
+    .Quality(85)
+    .Save(output);   // ✓ done</code></pre>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════ PIPELINE ══════════════════════ -->
+<section class="py-5" style="background:var(--surface2); border-top:1px solid var(--border); border-bottom:1px solid var(--border)">
+  <div class="container text-center reveal">
+    <p class="text-secondary mb-3 small fw-semibold letter-spacing">HOW IT WORKS</p>
+    <div class="pipeline gap-2">
+      <div class="pipe-box accent"><i class="bi bi-folder2-open me-1"></i>Load()</div>
+      <span class="pipe-arrow"><i class="bi bi-arrow-right"></i></span>
+      <div class="pipe-box">Resize()</div>
+      <span class="pipe-arrow"><i class="bi bi-arrow-right"></i></span>
+      <div class="pipe-box">Watermark()</div>
+      <span class="pipe-arrow"><i class="bi bi-arrow-right"></i></span>
+      <div class="pipe-box">Filter()</div>
+      <span class="pipe-arrow"><i class="bi bi-arrow-right"></i></span>
+      <div class="pipe-box">Quality()</div>
+      <span class="pipe-arrow"><i class="bi bi-arrow-right"></i></span>
+      <div class="pipe-box accent"><i class="bi bi-floppy me-1"></i>Save()</div>
+    </div>
+    <p class="text-secondary mt-3 small">Each call enqueues a processor — applied in order, then flushed on Save().</p>
+  </div>
+</section>
+
+<!-- ══════════════════════ FEATURES ══════════════════════ -->
+<section class="py-6 py-md-7" id="features" style="padding-top:5rem;padding-bottom:5rem">
+  <div class="container">
+    <div class="text-center mb-5 reveal">
+      <div class="section-label mb-2">Capabilities</div>
+      <h2 class="section-title">30+ built-in processors</h2>
+      <p class="text-secondary">Every common image operation — composable, chainable, zero boilerplate.</p>
+    </div>
+
+    <div class="row g-4">
+      <!-- Transform -->
+      <div class="col-sm-6 col-lg-4 reveal">
+        <div class="feature-card">
+          <div class="feature-icon"><i class="fa-solid fa-crop-simple"></i></div>
+          <h5 class="fw-bold mb-2">Transform</h5>
+          <p class="text-secondary small mb-0">
+            Resize, Crop, EntropyCrop, Rotate, RotateBounded, Flip, AutoRotate, Scale.
+            Supports crop anchors, resize modes (pad, stretch, crop).
+          </p>
+        </div>
+      </div>
+      <!-- Colour -->
+      <div class="col-sm-6 col-lg-4 reveal">
+        <div class="feature-card">
+          <div class="feature-icon"><i class="fa-solid fa-palette"></i></div>
+          <h5 class="fw-bold mb-2">Colour &amp; Tone</h5>
+          <p class="text-secondary small mb-0">
+            Brightness, Contrast, Saturation, Hue, Gamma, Alpha, Tint, ReplaceColor.
+            Fine-tune every pixel with integer or percentage values.
+          </p>
+        </div>
+      </div>
+      <!-- Filters -->
+      <div class="col-sm-6 col-lg-4 reveal">
+        <div class="feature-card">
+          <div class="feature-icon"><i class="fa-solid fa-wand-magic-sparkles"></i></div>
+          <h5 class="fw-bold mb-2">Filters &amp; Effects</h5>
+          <p class="text-secondary small mb-0">
+            GaussianBlur, GaussianSharpen, DetectEdges, Gray, Binary, Halftone,
+            Vignette, Pixelate, Mosaic — including region-specific censoring.
+          </p>
+        </div>
+      </div>
+      <!-- Compose -->
+      <div class="col-sm-6 col-lg-4 reveal">
+        <div class="feature-card">
+          <div class="feature-icon"><i class="fa-solid fa-layer-group"></i></div>
+          <h5 class="fw-bold mb-2">Compositing</h5>
+          <p class="text-secondary small mb-0">
+            Watermark (text), Overlay (image-on-image), Mask, Background,
+            BackgroundColor, ClearBackground. Opacity and position control.
+          </p>
+        </div>
+      </div>
+      <!-- Format -->
+      <div class="col-sm-6 col-lg-4 reveal">
+        <div class="feature-card">
+          <div class="feature-icon"><i class="fa-solid fa-file-image"></i></div>
+          <h5 class="fw-bold mb-2">Format &amp; Quality</h5>
+          <p class="text-secondary small mb-0">
+            JPEG, PNG, GIF (animation preserved), BMP. Control output quality,
+            resolution (DPI), and metadata (EXIF preserve / strip).
+          </p>
+        </div>
+      </div>
+      <!-- Extensible -->
+      <div class="col-sm-6 col-lg-4 reveal">
+        <div class="feature-card">
+          <div class="feature-icon"><i class="fa-solid fa-puzzle-piece"></i></div>
+          <h5 class="fw-bold mb-2">Extensible</h5>
+          <p class="text-secondary small mb-0">
+            Implement <code>IGraphicsProcessor</code> and call
+            <code>.ApplyProcessor(new MyProcessor())</code>.
+            Plug custom operations into the same fluent chain.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════ CODE EXAMPLES ══════════════════════ -->
+<section class="py-5" id="examples" style="background:var(--surface2);border-top:1px solid var(--border);border-bottom:1px solid var(--border)">
+  <div class="container">
+    <div class="text-center mb-5 reveal">
+      <div class="section-label mb-2">Examples</div>
+      <h2 class="section-title">See it in action</h2>
+    </div>
+
+    <div class="code-card reveal">
+      <ul class="nav nav-tabs" id="codeTabs" role="tablist">
+        <li class="nav-item"><button class="nav-link active" data-bs-toggle="tab" data-bs-target="#tab1">Resize &amp; format</button></li>
+        <li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#tab2">Mosaic / censor</button></li>
+        <li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#tab3">Watermark</button></li>
+        <li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#tab4">Chain everything</button></li>
+        <li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#tab5">Custom processor</button></li>
+      </ul>
+
+      <div class="tab-content p-3 p-md-4">
+
+        <div class="tab-pane fade show active" id="tab1">
+<pre><code class="language-csharp">using ImageProcessor;
+using ImageProcessor.Imaging;
+using ImageProcessor.Imaging.Formats;
+
+// Load → resize → sharpen → save as PNG
+using var factory = new ImageFactory();
+factory.Load("input.jpg")
+       .Resize(new ResizeLayer(1280, 720, ResizeMode.Crop))
+       .GaussianSharpen(5)
+       .Format(new PngFormat())
+       .Save("output.png");</code></pre>
+        </div>
+
+        <div class="tab-pane fade" id="tab2">
+<pre><code class="language-csharp">// Pixelate / censor a rectangular region of the image.
+// Great for redacting faces, licence plates, or text.
+using var factory = new ImageFactory();
+factory.Load("screenshot.png")
+       .Mosaic(new MosaicLayer(
+           x:      100,
+           y:      50,
+           width:  200,
+           height: 80,
+           size:   new Size(10, 10)))   // block size
+       .Save("censored.png");</code></pre>
+        </div>
+
+        <div class="tab-pane fade" id="tab3">
+<pre><code class="language-csharp">// Overlay a semi-transparent text watermark
+using var factory = new ImageFactory();
+factory.Load("photo.jpg")
+       .Watermark(new TextLayer
+       {
+           Text     = "© My Company 2025",
+           FontSize = 28,
+           Position = new Point(20, 20),
+           Opacity  = 75,          // 0–100
+           DropShadow = true
+       })
+       .Quality(90)
+       .Save("photo_watermarked.jpg");</code></pre>
+        </div>
+
+        <div class="tab-pane fade" id="tab4">
+<pre><code class="language-csharp">// Chain as many operations as you need —
+// they are applied in order on a single decode/encode cycle.
+using var factory = new ImageFactory(preserveExifData: true);
+factory.Load("raw.gif")         // auto-detects format
+       .AutoRotate()            // correct EXIF orientation
+       .Resize(new ResizeLayer(800, 600, ResizeMode.Crop,
+                               AnchorPosition.Center))
+       .Brightness(8)
+       .Contrast(5)
+       .Saturation(10)
+       .GaussianSharpen(3)
+       .Quality(85)
+       .Save("final.gif");      // GIF animation frames preserved</code></pre>
+        </div>
+
+        <div class="tab-pane fade" id="tab5">
+<pre><code class="language-csharp">// Plug your own logic into the same pipeline
+public class InvertProcessor : IGraphicsProcessor
+{
+    public dynamic DynamicParameter { get; set; }
+    public Dictionary&lt;string, string&gt; Settings { get; set; } = new();
+
+    public Image ProcessImage(ImageFactory factory)
+    {
+        Bitmap bmp = (Bitmap)factory.Image;
+        // ... invert pixels ...
+        return bmp;
+    }
+}
+
+// Use it just like any built-in processor
+factory.Load("img.png")
+       .ApplyProcessor(new InvertProcessor())
+       .Save("inverted.png");</code></pre>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════ INSTALL ══════════════════════ -->
+<section class="py-5" id="install" style="padding-top:5rem;padding-bottom:5rem">
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-lg-9">
+        <div class="text-center mb-5 reveal">
+          <div class="section-label mb-2">Installation</div>
+          <h2 class="section-title">Get up and running in 30 seconds</h2>
+        </div>
+
+        <!-- tabs: CLI / PM / PackageRef -->
+        <div class="code-card reveal">
+          <ul class="nav nav-tabs" role="tablist">
+            <li class="nav-item"><button class="nav-link active" data-bs-toggle="tab" data-bs-target="#i1">.NET CLI</button></li>
+            <li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#i2">Package Manager</button></li>
+            <li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#i3">PackageReference</button></li>
+          </ul>
+          <div class="tab-content p-3 p-md-4">
+            <div class="tab-pane fade show active" id="i1">
+<pre><code class="language-bash">dotnet add package ImageProcessor.Core</code></pre>
+            </div>
+            <div class="tab-pane fade" id="i2">
+<pre><code class="language-powershell">Install-Package ImageProcessor.Core</code></pre>
+            </div>
+            <div class="tab-pane fade" id="i3">
+<pre><code class="language-xml">&lt;PackageReference Include="ImageProcessor.Core" Version="2.*" /&gt;</code></pre>
+            </div>
+          </div>
+        </div>
+
+        <!-- Framework support -->
+        <div class="mt-5 reveal">
+          <h5 class="fw-semibold mb-3">Supported runtimes</h5>
+          <div class="d-flex flex-wrap gap-3">
+            <div class="fw-badge">
+              <i class="bi bi-check-circle-fill text-success"></i>
+              <span>.NET Standard 2.0</span>
+              <small class="text-secondary">(.NET Framework 4.6.1+, .NET Core 2+)</small>
+            </div>
+            <div class="fw-badge">
+              <i class="bi bi-check-circle-fill text-success"></i>
+              <span>.NET 8 · Windows</span>
+            </div>
+            <div class="fw-badge">
+              <i class="bi bi-check-circle-fill text-success"></i>
+              <span>.NET 9 · Windows</span>
+            </div>
+          </div>
+          <p class="text-secondary small mt-3">
+            <i class="bi bi-info-circle me-1"></i>
+            <code>System.Drawing.Common</code> is Windows-only on .NET 6+.
+            The <code>net8.0-windows</code> / <code>net9.0-windows</code> targets make that constraint explicit —
+            no surprise runtime errors.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════ CTA ══════════════════════ -->
+<section style="background:var(--surface2);border-top:1px solid var(--border);padding:4rem 0">
+  <div class="container text-center reveal">
+    <h2 class="fw-bold mb-3">Ready to stop writing GDI+ boilerplate?</h2>
+    <p class="text-secondary mb-4">One package. Fluent API. Every image operation you need.</p>
+    <div class="d-flex justify-content-center gap-3 flex-wrap">
+      <a href="https://www.nuget.org/packages/ImageProcessor.Core" target="_blank" class="btn btn-accent">
+        <i class="fa-solid fa-cube me-2"></i>View on NuGet
+      </a>
+      <a href="https://github.com/codejq/ImageProcessor.Core" target="_blank" class="btn btn-ghost">
+        <i class="bi bi-github me-2"></i>Star on GitHub
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════ FOOTER ══════════════════════ -->
+<footer class="py-4">
+  <div class="container d-flex flex-column flex-md-row align-items-center justify-content-between gap-3">
+    <div class="d-flex align-items-center gap-2 text-secondary small">
+      <i class="fa-solid fa-image" style="color:var(--accent-light)"></i>
+      <span>ImageProcessor.Core — Apache 2.0 License</span>
+    </div>
+    <div class="d-flex gap-3 text-secondary small">
+      <a href="https://github.com/codejq/ImageProcessor.Core" target="_blank" class="text-secondary text-decoration-none">
+        <i class="bi bi-github me-1"></i>GitHub
+      </a>
+      <a href="https://www.nuget.org/packages/ImageProcessor.Core" target="_blank" class="text-secondary text-decoration-none">
+        <i class="fa-solid fa-cube me-1"></i>NuGet
+      </a>
+      <a href="https://github.com/codejq/ImageProcessor.Core/blob/master/README.md" target="_blank" class="text-secondary text-decoration-none">
+        <i class="bi bi-book me-1"></i>Docs
+      </a>
+    </div>
+  </div>
+</footer>
+
+<!-- Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<!-- Highlight.js -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+<script>hljs.highlightAll();</script>
+
+<script>
+  // Copy install command
+  function copyInstall() {
+    navigator.clipboard.writeText('dotnet add package ImageProcessor.Core').then(() => {
+      const icon = document.getElementById('clipIcon');
+      icon.className = 'bi bi-clipboard-check';
+      icon.style.color = '#4ade80';
+      setTimeout(() => { icon.className = 'bi bi-clipboard'; icon.style.color = ''; }, 2000);
+    });
+  }
+
+  // Scroll reveal
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); } });
+  }, { threshold: 0.1 });
+  document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+</script>
+</body>
+</html>

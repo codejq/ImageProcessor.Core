@@ -20,6 +20,7 @@
 [![Build](https://github.com/codejq/ImageProcessor.Core/actions/workflows/build.yml/badge.svg)](https://github.com/codejq/ImageProcessor.Core/actions/workflows/build.yml)
 [![License: Apache 2.0](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](LICENSE)
 [![.NET](https://img.shields.io/badge/.NET-Standard%202.0%20%7C%208%20%7C%209-purple)](https://dotnet.microsoft.com)
+[![Docs](https://img.shields.io/badge/docs-GitHub%20Pages-blueviolet)](https://codejq.github.io/ImageProcessor.Core/)
 
 ---
 
